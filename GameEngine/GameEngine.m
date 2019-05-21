@@ -140,5 +140,8 @@ methods (Access = public)
     function out = GetTime(obj)
         out = obj.time;
     end
+    function obj = SetMinTimeDelta(obj,val)
+        obj.minTimeDelta = val;
+    end
 end
 end
