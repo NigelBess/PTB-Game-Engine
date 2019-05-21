@@ -1,0 +1,12 @@
+
+# CSV files
+*.csv
+
+# Matlab workspace files
+*.mat
+*.asv
+
+*.ignore
+
+test.m
+testClass.m

@@ -1,0 +1,16 @@
+#Template .gitignore for games created with this game engine
+#copy paste this file into .gitignore of your game
+GameEngine/
+
+# CSV files
+*.csv
+
+# Matlab workspace files
+*.mat
+
+*.ignore
+
+*.asv
+
+test.m
+testClass.m
