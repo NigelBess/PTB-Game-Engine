@@ -44,13 +44,13 @@ methods (Access = public)
         for i = 1:obj.numObjects
             obj.gameObjects{i}.SetGameEngine(obj);
         end
-      
+         if ~isempty(obj.renderer)
+            obj.renderer.StartRendering();
+        end
         for i = 1:obj.numObjects
             obj.gameObjects{i}.Awake();
         end
-        if ~isempty(obj.renderer)
-            obj.renderer.StartRendering();
-        end
+       
         for i = 1:obj.numObjects
             obj.gameObjects{i}.Start();
         end

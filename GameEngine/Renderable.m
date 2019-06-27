@@ -27,12 +27,9 @@ classdef Renderable < GameObject
             obj.size(instance,:) = [];
             obj.screenHits(instance,:) = [];
         end
-        function [positions,tex] = GetData(obj,instance)
-            if nargin<2
-                instance = 1;
-            end
+        function [positions,tex] = GetData(obj)
             c = obj.Renderer.Center();
-            positions = [obj.position(instance,1)-obj.size(instance,1)/2 ,obj.position(instance,2)-obj.size(instance,2)/2,obj.position(instance,1)+obj.size(instance,1)/2,obj.position(instance,2)+obj.size(instance,2)/2];
+            positions = [obj.position(:,1)-obj.size(:,1)/2 ,obj.position(:,2)-obj.size(:,2)/2,obj.position(:,1)+obj.size(:,1)/2,obj.position(:,2)+obj.size(:,2)/2];
            positions = positions + [c,c];
             tex = obj.texture;
         end
