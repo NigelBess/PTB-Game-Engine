@@ -86,19 +86,19 @@ classdef Renderer < GameObject
         function obj = SortRenderables(obj)
             obj.renderables = SortByProperty(obj.renderables,'renderLayer','descend');
         end
-        function out = CheckSideIntersection(obj,renderable,index)
+        function out = CheckSideIntersection(obj,renderable,instance)
+            if nargin<3
+                instance = 1;
+            end
             hits = zeros(2,2);%[xlow, xHigh; yLow, yHigh]
             direction = [1,-1;1,-1];
             pos = renderable.GetData();
             for i = 1:4
-                hits(i) =  pos(i)*direction(i)< obj.rect(i)*direction(i);
+                hits(i) =  pos(instance,i)*direction(i)< obj.rect(instance,i)*direction(i);
             end
             out = zeros(2,1);
             for i = 1:2
                 out(i) = -hits(i,1)+hits(i,2);
-            end
-            if nargin>2
-               	out = out(index);
             end
         end
         function out = GetRect(obj)

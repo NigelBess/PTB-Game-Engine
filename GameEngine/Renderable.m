@@ -3,9 +3,9 @@ classdef Renderable < GameObject
         position = [0,0]%position in pixels relative to the center of the screen
         image%image matrix defining the renderable's texture
         texture%pointer to its associated texture
-        size
+        size = [0,0]
         screenBounded%should this renderer be limited to stay inside the screen
-        screenHits
+        screenHits = [0,0]
     end
     properties(Access = public)
         renderLayer = 100
