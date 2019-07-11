@@ -46,7 +46,6 @@ classdef Renderer < GameObject
                  [obj.width, obj.height] = Screen('WindowSize', obj.screenNumber);
                  rect = rect + [obj.width,obj.height,0,0].*obj.percentRect;
                  rect = rect - [0,0,obj.width,obj.height].*(1-obj.percentRect);
-                 disp(rect);
                 [obj.displayWindow, obj.rect] = PsychImaging('OpenWindow', obj.screenNumber, obj.backgroundColor,rect);
                 % Enable alpha blending with proper blend-function. We need it for drawing of our alpha-mask (gaussian aperture):
                 Screen('BlendFunction', obj.displayWindow, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
