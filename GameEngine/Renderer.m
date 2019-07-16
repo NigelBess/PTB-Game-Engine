@@ -58,7 +58,9 @@ classdef Renderer < GameObject
             for i = 1:numel(obj.renderables)
                 if obj.renderables{i}.enabled
                  [positions,tex] = obj.renderables{i}.GetData();
-                 Screen('DrawTexture', obj.displayWindow, tex, [], positions, 0, 0); 
+                 for j = 1:size(positions,1)
+                    Screen('DrawTexture', obj.displayWindow, tex, [], positions(j,:), 0, 0); 
+                 end
                 end
             end
             Screen('Flip', obj.displayWindow);

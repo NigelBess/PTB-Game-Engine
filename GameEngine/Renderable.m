@@ -1,11 +1,14 @@
 classdef Renderable < GameObject
     properties(Access = protected)
+        rootPosition = [0,0];
         position = [0,0]%position in pixels relative to the center of the screen
         image%image matrix defining the renderable's texture
         texture%pointer to its associated texture
         size = [0,0]
         screenBounded%should this renderer be limited to stay inside the screen
         screenHits = [0,0]
+        parent
+        children = {};
     end
     properties(Access = public)
         renderLayer = 100
@@ -28,39 +31,43 @@ classdef Renderable < GameObject
             obj.screenHits(instance,:) = [];
         end
         function [positions,tex] = GetData(obj)
-            c = obj.Renderer.Center();
+            globalPos = obj.Renderer.Center()+obj.GetGlobalPosition();
             positions = [obj.position(:,1)-obj.size(:,1)/2 ,obj.position(:,2)-obj.size(:,2)/2,obj.position(:,1)+obj.size(:,1)/2,obj.position(:,2)+obj.size(:,2)/2];
-           positions = positions + [c,c];
+           positions = positions + [globalPos,globalPos];
             tex = obj.texture;
         end
         function obj = SetPosition(obj,pos,instance)
              if nargin<3
-                instance = 1;
-            end
-            obj.position(instance,:) = pos;
-            if obj.screenBounded
-                hits = obj.Renderer.CheckSideIntersection(obj,instance);
-                obj.screenHits(instance,:) = hits;
-            else
-                return;
-            end
-            if sum(abs(hits))
-                rect = obj.Renderer.GetRect();
-                for i = 1:2
-                    if abs(hits(i))
-                        index = (hits(i)+3)/2;
-                        c = obj.Renderer.Center;
-                        rect(4) =0;
-                        obj.position(instance,i) = rect(i*index) - hits(i)*(obj.size(instance,i)/2-c(i));
+                obj.rootPosition = pos;
+             else
+                 obj.position(instance,:) = pos;
+             end
+             for j = 1:size(obj.position,1)
+                if obj.screenBounded
+                    hits = obj.Renderer.CheckSideIntersection(obj,j);
+                    obj.screenHits(j,:) = hits;
+                else
+                    return;
+                end
+                if sum(abs(hits))
+                    rect = obj.Renderer.GetRect();
+                    for i = 1:2
+                        if abs(hits(i))
+                            index = (hits(i)+3)/2;
+                            c = obj.Renderer.Center;
+                            rect(4) =0;
+                            obj.position(j,i) = rect(i*index) - hits(i)*(obj.size(j,i)/2-c(i))-obj.GetGlobalPosition;
+                        end
                     end
                 end
-            end
+             end
         end
         function out = GetPosition(obj,instance)
-             if nargin<2
-                instance = 1;
+            out = obj.GetGlobalPosition();
+            if nargin<2
+                return;
             end
-            out = obj.position(instance,:);
+            out = out + obj.position(instance,:);
         end
         function img = GenerateImage(obj)
         end
@@ -79,11 +86,8 @@ classdef Renderable < GameObject
                 out = out(index);
             end
         end
-         function out = Distance(obj,other,index,instance)
-            if nargin<4
-                instance = 1;
-            end
-            pos1 = obj.GetPosition(instance);
+         function out = Distance(obj,other,index)
+            pos1 = obj.GetPosition();
             pos2 = other.GetPosition();
             if nargin<3
                 for i = 1:2
@@ -92,6 +96,22 @@ classdef Renderable < GameObject
                 return
             end
             out = abs(pos1(index)-pos2(index));
-        end
+         end
+         function out = GetGlobalPosition(obj)
+             out = obj.rootPosition;
+             if ~isempty(obj.parent)
+                out = out + obj.parent.GetGlobalPosition();
+             end
+         end
+         function obj = SetParent(obj,parent)
+             obj.parent = parent;
+             obj.parent.AddChild(obj);
+         end
+         function obj = AddChild(obj,child)
+            obj.children{end+1} = child;
+         end
+         function obj = RenderAfter(obj,other)
+            obj.renderLayer = other.renderLayer+1;
+         end
     end
 end

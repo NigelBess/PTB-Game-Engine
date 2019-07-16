@@ -16,7 +16,7 @@ classdef PhysicsObject < Renderable
         end
         function obj = BaseUpdate(obj)
             delta = min(obj.velocity*obj.Game.GetTimeDelta(),obj.maxPixelsPerFrame);
-            obj.SetPosition(obj.position + delta);
+            obj.SetPosition(obj.rootPosition + delta);
         end
     end
 end
