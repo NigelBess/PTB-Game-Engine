@@ -115,6 +115,7 @@ classdef Renderable < GameObject
          end
          function out = PngToImg(obj,pngFileName)
              [out,~,alpha] = imread(pngFileName,'png');
+             disp(size(out));
              out(:,:,4) = alpha;
          end
     end
