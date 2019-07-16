@@ -113,5 +113,9 @@ classdef Renderable < GameObject
          function obj = RenderAfter(obj,other)
             obj.renderLayer = other.renderLayer+1;
          end
+         function out = PngToImg(obj,pngFileName)
+             [out,~,alpha] = imread(pngFileName,'png');
+             out(:,:,4) = alpha;
+         end
     end
 end
