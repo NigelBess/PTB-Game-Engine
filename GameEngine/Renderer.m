@@ -12,15 +12,22 @@ classdef Renderer < GameObject
         height
         xCenter
         yCenter
+        
+        %for only rendering to a small portion of the screen
+        percentRect = [0 0 1 1];%min x, min y, max x, max y
     end
     methods (Access = public)
-        function obj = Renderer(screenNum,backgroundColor)
+        function obj = Renderer(screenNum,backgroundColor,percentRect)
             if(nargin<1)
                 screenNum = 0;
             end
             if(nargin<2)
                 backgroundColor = 0.5;
             end
+            if (nargin<3)
+                percentRect = [0 0 1 1];
+            end
+            obj.percentRect = percentRect;
             obj.screenNumber = screenNum;
             obj.backgroundColor = backgroundColor;
             obj.defaultBackgroundColor = backgroundColor;
@@ -35,8 +42,11 @@ classdef Renderer < GameObject
                 Screen('Preference','SkipSyncTests',1);
                 Screen('Preference','VisualDebugLevel',0);
                 Screen('Preference','SuppressAllWarnings',1);
-                [obj.displayWindow, obj.rect] = PsychImaging('OpenWindow', obj.screenNumber, obj.backgroundColor);
-
+                 rect = Screen('GlobalRect', obj.screenNumber);
+                 [obj.width, obj.height] = Screen('WindowSize', obj.screenNumber);
+                 rect = rect + [obj.width,obj.height,0,0].*obj.percentRect;
+                 rect = rect - [0,0,obj.width,obj.height].*(1-obj.percentRect);
+                [obj.displayWindow, obj.rect] = PsychImaging('OpenWindow', obj.screenNumber, obj.backgroundColor,rect);
                 % Enable alpha blending with proper blend-function. We need it for drawing of our alpha-mask (gaussian aperture):
                 Screen('BlendFunction', obj.displayWindow, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                  [obj.width, obj.height] = Screen('WindowSize', obj.displayWindow);
