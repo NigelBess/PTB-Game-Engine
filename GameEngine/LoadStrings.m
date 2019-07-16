@@ -1,8 +1,8 @@
-function varargout = LoadStrings(fileName)
+function out = LoadStrings(fileName)
     temp = string(importdata([fileName,'.ignore']));
     n = numel(temp);
-    varargout = cell(1,n);
+    out = cell(1,n);
     for i = 1:n
-        varargout{i} = string(temp{i});
+        out{i} = string(temp{i});
     end
 end

@@ -5,9 +5,9 @@ function SaveStrings(fileName,varargin)
     end
     for i = 1:numel(varargin)
         try
-            fprintf(file,varargin{i}+"\n");
+            fprintf(file,string(varargin{i})+"\n");
         catch e
-            fprintf(file,varargin(i)+"\n");
+            fprintf(file,string(varargin(i))+"\n");
         end
     end  
     fclose(file);
