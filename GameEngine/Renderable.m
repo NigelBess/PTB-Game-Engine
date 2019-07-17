@@ -56,7 +56,7 @@ classdef Renderable < GameObject
                             index = (hits(i)+3)/2;
                             c = obj.Renderer.Center;
                             rect(4) =0;
-                            obj.position(j,i) = rect(i*index) - hits(i)*(obj.size(j,i)/2-c(i))-obj.GetGlobalPosition;
+                            obj.position(j,i) = rect(i*index) - hits(i)*(obj.size(j,i)/2-c(i))-obj.GetGlobalPosition(i);
                         end
                     end
                 end
@@ -97,10 +97,13 @@ classdef Renderable < GameObject
             end
             out = abs(pos1(index)-pos2(index));
          end
-         function out = GetGlobalPosition(obj)
+         function out = GetGlobalPosition(obj, index)
              out = obj.rootPosition;
              if ~isempty(obj.parent)
                 out = out + obj.parent.GetGlobalPosition();
+             end
+             if nargin>1
+                 out = out(index);
              end
          end
          function obj = SetParent(obj,parent)
@@ -115,8 +118,12 @@ classdef Renderable < GameObject
          end
          function out = PngToImg(obj,pngFileName)
              [out,~,alpha] = imread(pngFileName,'png');
-             disp(size(out));
              out(:,:,4) = alpha;
+         end
+         function out = SelfDistance(obj,instance1,instance2)
+             pos1 = obj.position(instance1,:);
+             pos2 = obj.position(instance2,:);
+            out = sqrt(sum((pos1-pos2).^2));
          end
     end
 end
