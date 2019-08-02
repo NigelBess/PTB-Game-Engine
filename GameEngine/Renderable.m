@@ -19,7 +19,7 @@ classdef Renderable < GameObject
                 position = [0,0];
             end
             if nargin<3
-                size = [1,1];
+                size = obj.size(1,:);
             end
             obj.position(end+1,:) = position;
             obj.size(end+1,:) = size;
