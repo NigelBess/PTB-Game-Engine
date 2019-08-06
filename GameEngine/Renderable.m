@@ -36,6 +36,9 @@ classdef Renderable < GameObject
            positions = positions + [globalPos,globalPos];
             tex = obj.texture;
         end
+        function obj =  SetRootPosition(obj,pos)
+            obj.rootPosition = pos;
+        end
         function obj = SetPosition(obj,pos,instance)
              if nargin<3
                 obj.rootPosition = pos;
