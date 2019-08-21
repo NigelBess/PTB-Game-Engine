@@ -56,10 +56,15 @@ classdef Renderable < GameObject
                     rect = obj.Renderer.GetRect();
                     for i = 1:2
                         if abs(hits(i))
-                            index = (hits(i)+3)/2;
+                            index = (hits(i)+3)/2;%0, 1 or -1
                             c = obj.Renderer.Center;
                             rect(4) =0;
-                            obj.position(j,i) = rect(i*index) - hits(i)*(obj.size(j,i)/2-c(i))-obj.GetGlobalPosition(i);
+                            pos = rect(i*index) - hits(i)*(obj.size(j,i)/2-c(i));
+                            if  size(obj.position,1) == 1
+                                obj.rootPosition(i) = pos;
+                            else
+                            obj.position(j,i) = pos-obj.GetGlobalPosition(i);
+                            end
                         end
                     end
                 end
