@@ -42,7 +42,11 @@ classdef Renderer < GameObject
                 Screen('Preference','SkipSyncTests',1);
                 Screen('Preference','VisualDebugLevel',0);
                 Screen('Preference','SuppressAllWarnings',1);
+                try
                  rect = Screen('GlobalRect', obj.screenNumber);
+                catch e
+                    error(string(obj.screenNumber) + "is an invalid screen number. Make sure you select 0 if you are using a single monitor");
+                end
                  [obj.width, obj.height] = Screen('WindowSize', obj.screenNumber);
                  rect = rect + [obj.width,obj.height,0,0].*obj.percentRect;
                  rect = rect - [0,0,obj.width,obj.height].*(1-obj.percentRect);
