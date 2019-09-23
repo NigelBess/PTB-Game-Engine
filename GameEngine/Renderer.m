@@ -71,9 +71,9 @@ classdef Renderer < GameObject
             obj.ClearFrame();
             for i = 1:numel(obj.renderables)
                 if obj.renderables{i}.enabled
-                 [positions,tex] = obj.renderables{i}.GetData();
+                 [positions,tex,alpha] = obj.renderables{i}.GetData();
                  for j = 1:size(positions,1)
-                    Screen('DrawTexture', obj.displayWindow, tex, [], positions(j,:), 0, 0); 
+                    Screen('DrawTexture', obj.displayWindow, tex, [], positions(j,:), 0, 0, alpha); 
                  end
                 end
             end

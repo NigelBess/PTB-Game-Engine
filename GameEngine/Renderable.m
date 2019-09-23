@@ -9,6 +9,7 @@ classdef Renderable < GameObject
         screenHits = [0,0]
         parent
         children = {};
+        globalAlpha = 1;
     end
     properties(Access = public)
         renderLayer = 100
@@ -30,11 +31,12 @@ classdef Renderable < GameObject
             obj.size(instance,:) = [];
             obj.screenHits(instance,:) = [];
         end
-        function [positions,tex] = GetData(obj)
+        function [positions,tex,alpha] = GetData(obj)
             globalPos = obj.Renderer.Center()+obj.GetGlobalPosition();
             positions = [obj.position(:,1)-obj.size(:,1)/2 ,obj.position(:,2)-obj.size(:,2)/2,obj.position(:,1)+obj.size(:,1)/2,obj.position(:,2)+obj.size(:,2)/2];
            positions = positions + [globalPos,globalPos];
             tex = obj.texture;
+            alpha = obj.globalAlpha;
         end
         function obj =  SetRootPosition(obj,pos)
             obj.rootPosition = pos;
@@ -132,6 +134,9 @@ classdef Renderable < GameObject
              pos1 = obj.position(instance1,:);
              pos2 = obj.position(instance2,:);
             out = sqrt(sum((pos1-pos2).^2));
+         end
+         function obj = SetAlpha(obj,value)
+             obj.globalAlpha = value;
          end
     end
 end
